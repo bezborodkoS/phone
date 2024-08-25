@@ -5,16 +5,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PhoneFab2 {
-    private Map<String,CheckNum> map;
+    private Map<String,Map<String,CheckNum>> map;
+
     public PhoneFab2() {
         this.map = new HashMap<>();
-        this.map.put(CountryNumber.class.toString() , new CountryNumber());
-        this.map.put(IsLastNumb999.class.toString() , new IsLastNumb999());
-        this.map.put(IsAd.class.toString() , new IsAd());
-        this.map.put(CheckBlackList.class.toString() , new CheckBlackList());
     }
 
-    public Map<String, CheckNum> getMap() {
+    public Map<String, Map<String, CheckNum>> getMap() {
         return map;
     }
+
+    public boolean addSettings(String day,ArrayList<CheckNum> checkNums){
+        putMap(day, checkNums);
+        System.out.println(map);
+        return false;
+    }
+
+    private boolean putMap(String day,ArrayList<CheckNum> checkNums){
+        Map<String, CheckNum> checkNumMap = new HashMap<>();
+        for (CheckNum i : checkNums) {
+            checkNumMap.put(i.getClass().getSimpleName(),i);
+        }
+        map.put(day,checkNumMap);
+        return true;
+    }
+
 }

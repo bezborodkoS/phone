@@ -1,7 +1,4 @@
-import check.CheckNum;
-import check.PhoneFab;
-import check.PhoneFab2;
-import check.TrasportObject;
+import check.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,12 +44,12 @@ public class Phone {
         return false;
     }
 
-    public void doCall(String number) {
+    public void doCall(String number, String day) {
 
         TrasportObject trasportObject = new TrasportObject();
         trasportObject.setBlackArrayList(blackNumbersList);
         trasportObject.setNumber(number);
-        boolean checkStatus = isCheckStatus2(number, trasportObject);
+        boolean checkStatus = isCheckStatus2(number, trasportObject,day);
         if (checkStatus) {
             System.out.println("Can phone " + number);
         }
@@ -69,20 +66,36 @@ public class Phone {
         return true;
     }
 
-    private boolean isCheckStatus2(String number, TrasportObject trasportObject) {
-        Map<String,CheckNum> map = phoneFab2.getMap();
-        for(Map.Entry<String, CheckNum> entry: map.entrySet()) {
-            // get key
-            String key = entry.getKey();
-            // get value
-            CheckNum value = entry.getValue();
-            if (value.checkNum(trasportObject)) {
-                value.printMess(number);
-                return false;
+    private boolean isCheckStatus2(String number, TrasportObject trasportObject, String day) {
+        Map<String, Map<String, CheckNum>> map = phoneFab2.getMap();
+//        System.out.println("/////////////"+map.get(IsAd.class.toString()));
+        for (Map.Entry<String, Map<String, CheckNum>> entry : map.entrySet()) {
+            // get keyMap
+            String keyMap = entry.getKey();
+            // get valueMap
+            Map<String, CheckNum> valueMap = entry.getValue();
+            if (keyMap.equals(day)) {
+                for (Map.Entry<String, CheckNum> checkNumMap : valueMap.entrySet()) {
+                    // get key
+                    String key = entry.getKey();
+                    // get value
+                    CheckNum value = checkNumMap.getValue();
+                    if (value.checkNum(trasportObject)) {
+                        value.printMess(number);
+                        return false;
+                    }
+                }
             }
+
         }
         return true;
     }
+
+    public boolean addSettingsBlock(String day, ArrayList<CheckNum> checkNumArrayList) {
+        phoneFab2.addSettings(day, checkNumArrayList);
+        return true;
+    }
+
 
 //    private boolean isLastNumb999(String number){
 //        if (number.endsWith("999")){
